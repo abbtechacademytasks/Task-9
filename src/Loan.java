@@ -1,8 +1,22 @@
 public class Loan {
-    String loanId;
-    BookCopy bookCopy;
-    Member member;
-    int borrowDay;
-    int dueDay;
-    boolean returned;
+    private static int nextId = 0;
+    private final String loanId;
+    private final BookCopy bookCopy;
+    private final Member member;
+    private final int borrowDay;
+    private final int dueDay;
+    private final boolean returned;
+
+    public Loan(Member member, BookCopy bookCopy, int borrowDay, int dueDay) {
+        this.loanId = "L-" + nextId++;
+        this.member = member;
+        this.bookCopy = bookCopy;
+        this.borrowDay = borrowDay;
+        this.dueDay = dueDay;
+        this.returned = false;
+    }
+
+    String getLoanId() {
+        return loanId;
+    }
 }
