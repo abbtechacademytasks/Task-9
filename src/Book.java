@@ -17,4 +17,8 @@ public class Book {
     String getId() {
         return id;
     }
+
+    String getTitle() {
+        return title;
+    }
 }

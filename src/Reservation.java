@@ -18,4 +18,8 @@ public class Reservation {
     int getPriorityScore() {
         return priorityScore;
     }
+
+    Member getMember() {
+        return member;
+    }
 }

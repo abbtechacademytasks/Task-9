@@ -15,7 +15,16 @@ public class Member extends LibraryUser implements Finable, Notifiable {
 
     @Override
     public double calculateFine(int daysLate) {
-        return 0;
+        double fineRate;
+
+        switch (membershipType) {
+            case STUDENT ->  fineRate = 0.3;
+            case REGULAR ->   fineRate = 0.5;
+            case PREMIUM ->   fineRate = 0.2;
+            default -> fineRate = 1;
+        }
+
+        return fineRate *  daysLate;
     }
 
     @Override

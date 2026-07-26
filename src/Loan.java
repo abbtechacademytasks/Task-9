@@ -5,7 +5,7 @@ public class Loan {
     private final Member member;
     private final int borrowDay;
     private final int dueDay;
-    private final boolean returned;
+    private boolean returned;
 
     public Loan(Member member, BookCopy bookCopy, int borrowDay, int dueDay) {
         this.loanId = "L-" + nextId++;
@@ -18,5 +18,25 @@ public class Loan {
 
     String getLoanId() {
         return loanId;
+    }
+
+    Boolean isReturned() {
+        return returned;
+    }
+
+    void setReturned(boolean returned) {
+        this.returned = returned;
+    }
+
+    Member getMember() {
+        return member;
+    }
+
+    int getDueDay() {
+        return dueDay;
+    }
+
+    BookCopy getBookCopy() {
+        return bookCopy;
     }
 }

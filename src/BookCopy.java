@@ -2,7 +2,7 @@ public class BookCopy {
     private static int nextId;
     private final String copyId;
     private final Book book;
-    private final String branchId;
+    private String branchId;
     private CopyStatus status;
 
     public BookCopy(Book book, String branchId, CopyStatus status) {
@@ -22,5 +22,9 @@ public class BookCopy {
 
     Book getBook() {
         return book;
+    }
+
+    void setBranchId(String branchId) {
+        this.branchId = branchId;
     }
 }

@@ -15,4 +15,8 @@ public class Branch {
         this.name = name;
         this.address = address;
     }
+
+    String getName() {
+        return name;
+    }
 }
