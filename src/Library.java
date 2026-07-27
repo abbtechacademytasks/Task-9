@@ -11,7 +11,7 @@ public class Library {
     Map<Member, Queue<Notification>>  memberNotifications  =  new HashMap<>();
     Set<Member> blackList =   new HashSet<>();
     Deque<String> transferHistory = new ArrayDeque<>();
-    TreeMap<String, Set<Book>> bookGenres =  new TreeMap<>();
+    TreeMap<String, Set<Book>> bookGenres =  new TreeMap<>(); //todo
     Map<Member, Integer> activeMembers =  new HashMap<>();
 
     private final Comparator<Reservation> reservationComparator = (r1, r2) -> {
@@ -304,7 +304,7 @@ public class Library {
         if (topN <= 0) {
             return new ArrayList<>();
         }
-        
+
         List<Member> result = new ArrayList<>(activeMembers.keySet());
 
         Comparator<Member> comparator = (m1, m2) -> {
@@ -320,7 +320,11 @@ public class Library {
     }
 
     void processNotifications(int currentDay) {
-        // todo
+        for (Queue<Notification> notificationQueue : memberNotifications.values()) {
+            Notification notification = notificationQueue.poll();
+            printMessage("[" + notification.getType() + "] Day: " + notification.getDay() + ". Message: "
+                    + notification.getMessage());
+        }
     }
 
     void printMessage(String message) {

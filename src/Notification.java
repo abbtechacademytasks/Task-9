@@ -8,4 +8,16 @@ public class Notification {
         this.message = message;
         this.day = day;
     }
+
+    NotificationType getType() {
+        return type;
+    }
+
+    String getMessage() {
+        return message;
+    }
+
+    int getDay() {
+        return day;
+    }
 }
