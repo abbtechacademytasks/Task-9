@@ -234,7 +234,27 @@ public class Library {
     }
 
     List<Book> searchBooks(String keyword) {
-        return null; // todo
+        List<Book> result = new ArrayList<>();
+        Set<String> foundBookIds = new HashSet<>();
+        keyword = keyword.trim().toLowerCase();
+
+        for (Branch branch : branches.values()) {
+            for (List<BookCopy> bookCopies : branch.bookCopies.values()) {
+                for (BookCopy bookCopy : bookCopies) {
+                    Book book = bookCopy.getBook();
+
+                    if  (book.getTitle().toLowerCase().contains(keyword) ||
+                            book.getAuthor().toLowerCase().contains(keyword) ||
+                            book.getGenre().toLowerCase().contains(keyword)) {
+                        if (foundBookIds.add(book.getId())) {
+                            result.add(book);
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
     void generateBranchReport(String branchId) {
