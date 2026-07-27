@@ -11,7 +11,7 @@ public class Library {
     Map<Member, Queue<Notification>>  memberNotifications  =  new HashMap<>();
     Set<Member> blackList =   new HashSet<>();
     Deque<String> transferHistory = new ArrayDeque<>();
-    TreeMap<String, Set<Book>> bookGenres =  new TreeMap<>(); //todo
+    TreeMap<String, Set<Book>> bookGenres =  new TreeMap<>();
     Map<Member, Integer> activeMembers =  new HashMap<>();
 
     private final Comparator<Reservation> reservationComparator = (r1, r2) -> {
@@ -47,28 +47,7 @@ public class Library {
 
         if (copies != null) {
             for (BookCopy copy : copies) {
-                if (copy.getStatus() == CopyStatus.AVAILABLE) {
-                    copy.setStatus(CopyStatus.BORROWED);
-                    int dueDay = currentDay;
-
-                    if (m.getMembershipType() == MembershipType.PREMIUM) {
-                        dueDay += 21;
-                    } else {
-                        dueDay += 14;
-                    }
-
-                    Loan loan = new Loan(m, copy, currentDay, dueDay);
-
-                    memberLoans.computeIfAbsent(m, k -> new ArrayList<>());
-                    memberLoans.get(m).add(loan);
-
-                    loanHistory.add(loan);
-
-                    bookInterestsStats.put(copy.getBook(),
-                            bookInterestsStats.getOrDefault(copy.getBook(), 0) + 1);
-
-                    activeMembers.put(m, activeMembers.getOrDefault(m, 0) + 1);
-
+                if (takeBook(m, copy, currentDay)) {
                     return true;
                 }
             }
@@ -321,21 +300,23 @@ public class Library {
 
     void processNotifications(int currentDay) {
         for (Queue<Notification> notificationQueue : memberNotifications.values()) {
-            Notification notification = notificationQueue.poll();
-            printMessage("[" + notification.getType() + "] Day: " + notification.getDay() + ". Message: "
-                    + notification.getMessage());
+            while (!notificationQueue.isEmpty()) {
+                Notification notification = notificationQueue.poll();
+                printMessage("[" + notification.getType() + "] Day: " + notification.getDay() + ". Message: "
+                        + notification.getMessage());
+            }
         }
     }
 
-    void printMessage(String message) {
+    private void printMessage(String message) {
         System.out.println(message);
     }
 
-    boolean isMemberContainInBlackList(Member member) {
+    private boolean isMemberContainInBlackList(Member member) {
         return blackList.contains(member);
     }
 
-    boolean takeBook(Member m, BookCopy bookCopy, int currentDay) {
+    private boolean takeBook(Member m, BookCopy bookCopy, int currentDay) {
         if (isMemberContainInBlackList(m)) {
             printMessage("Member is blacklisted!");
             return false;
@@ -367,6 +348,12 @@ public class Library {
         }
 
         return false;
+    }
+
+    void addBook(Book book) {
+        books.add(book);
+
+        bookGenres.computeIfAbsent(book.getGenre(), k -> new HashSet<>()).add(book);
     }
 }
 

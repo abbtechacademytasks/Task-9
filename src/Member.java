@@ -1,6 +1,20 @@
+import java.util.Objects;
+
 public class Member extends LibraryUser implements Finable, Notifiable {
     private static int nextId = 0;
     private final MembershipType membershipType;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Member member = (Member) o;
+        return Objects.equals(id, member.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 
     public Member(String name, String email, MembershipType membershipType) {
         super("M-" + nextId++, name, email);
