@@ -257,12 +257,66 @@ public class Library {
         return result;
     }
 
-    void generateBranchReport(String branchId) {
-        // todo
+    void generateBranchReport(String branchId, int currentDay) {
+        Branch branch = branches.get(branchId);
+
+        if (branch == null) {
+            printMessage("Generate branch failed: branch not found in source branch");
+            return;
+        }
+
+        int bookCount = 0;
+        Set<String> uniqueGenres = new HashSet<>();
+
+        for (List<BookCopy> copies : branch.bookCopies.values()) {
+            bookCount += copies.size();
+
+            for (BookCopy copy : copies) {
+                uniqueGenres.add(copy.getBook().getGenre());
+            }
+        }
+
+        int uniqueGenreCount = uniqueGenres.size();
+        int activeLoanCount = 0;
+        int overdueLoanCount = 0;
+
+        for (List<Loan> loans : memberLoans.values()) {
+            for (Loan loan : loans) {
+                BookCopy bookCopy = loan.getBookCopy();
+
+                if (bookCopy.getBranchId().equals(branchId)) {
+                    activeLoanCount++;
+
+                    if (currentDay > loan.getDueDay()) {
+                        overdueLoanCount++;
+                    }
+                }
+            }
+        }
+
+        String message = "Book count: " + bookCount + " Unique Genre " + uniqueGenreCount + " Active loans: "
+                + activeLoanCount + " Overdue loans: " + overdueLoanCount;
+
+        printMessage(message);
     }
 
     List<Member> getTopActiveMembers(int topN) {
-        return null; // todo
+        if (topN <= 0) {
+            return new ArrayList<>();
+        }
+        
+        List<Member> result = new ArrayList<>(activeMembers.keySet());
+
+        Comparator<Member> comparator = (m1, m2) -> {
+            int firstLoanCount = activeMembers.get(m1);
+            int secondLoanCount = activeMembers.get(m2);
+
+            return Integer.compare(secondLoanCount, firstLoanCount);
+        };
+
+        result.sort(comparator); // Collections.sort() ilə eynidi
+
+        return result.subList(0, Math.min(topN, result.size()));
     }
 
     void processNotifications(int currentDay) {

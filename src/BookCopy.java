@@ -24,6 +24,10 @@ public class BookCopy {
         return book;
     }
 
+    String getBranchId() {
+        return branchId;
+    }
+
     void setBranchId(String branchId) {
         this.branchId = branchId;
     }
