@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,5 +19,17 @@ public class Branch {
 
     String getName() {
         return name;
+    }
+
+    String getBranchId() {
+        return branchId;
+    }
+
+    void addBookCopy(BookCopy bookCopy) {
+        bookCopy.setBranchId(branchId);
+
+        bookCopies
+                .computeIfAbsent(bookCopy.getBook().getId(), key -> new ArrayList<>())
+                .add(bookCopy);
     }
 }

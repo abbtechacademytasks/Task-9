@@ -42,8 +42,12 @@ public class Member extends LibraryUser implements Finable, Notifiable {
     }
 
     @Override
-    public void receiveNotification(Notification n) {
-
+    public void receiveNotification(Notification notification) {
+        System.out.println(
+                "Notification for " + name + ": [" + notification.getType() +
+                        "] Day: " + notification.getDay() +
+                        ". Message: " + notification.getMessage()
+        );
     }
 
     MembershipType getMembershipType() {

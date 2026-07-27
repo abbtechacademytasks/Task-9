@@ -1,6 +1,7 @@
 import java.util.*;
 
 public class Library {
+    private int currentDay = 1;
     Map<String, Branch> branches =  new HashMap<>();
     Set<Book> books = new HashSet<>();
     Map<Member, List<Loan>>  memberLoans =  new HashMap<>();
@@ -236,7 +237,7 @@ public class Library {
         return result;
     }
 
-    void generateBranchReport(String branchId, int currentDay) {
+    void generateBranchReport(String branchId) {
         Branch branch = branches.get(branchId);
 
         if (branch == null) {
@@ -299,11 +300,12 @@ public class Library {
     }
 
     void processNotifications(int currentDay) {
-        for (Queue<Notification> notificationQueue : memberNotifications.values()) {
+        for (Map.Entry<Member, Queue<Notification>> entry : memberNotifications.entrySet()) {
+            Queue<Notification> notificationQueue = entry.getValue();
+
             while (!notificationQueue.isEmpty()) {
                 Notification notification = notificationQueue.poll();
-                printMessage("[" + notification.getType() + "] Day: " + notification.getDay() + ". Message: "
-                        + notification.getMessage());
+                entry.getKey().receiveNotification(notification);
             }
         }
     }
@@ -354,6 +356,18 @@ public class Library {
         books.add(book);
 
         bookGenres.computeIfAbsent(book.getGenre(), k -> new HashSet<>()).add(book);
+    }
+
+    void addBranch(Branch branch) {
+        branches.put(branch.getBranchId(), branch);
+    }
+
+    void nextDay() {
+        currentDay++;
+    }
+
+    int getCurrentDay() {
+        return currentDay;
     }
 }
 
